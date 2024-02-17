@@ -1,3 +1,4 @@
 # Car Sales Web Scraper
-The following repository contains code to scrape the carsales website. The goal is to use this data to build a car pricing AI model. 
+This code is designed to extract car details from the carsales.com website, utilizing Playwright for HTML parsing and Python for feature extraction, before storing the data in ClickHouse. The point of extracting these features is to use them as training data for my other project - [Car Price Predictor](https://github.com/luke-harriman/Car-Price-Predictor). Unfortunately, it was unsuccessful due to the inability to bypass carsales.com's bot protection with a sufficiently advanced proxy network. I was utilising Bright Data but was denied access to their Resdiential IP Network.
 
+Despite this setback, I decided to commit the code to Github as I can potentially reuse it for scraping data from other websites or revisit the project if I can find a sufficiently powerful proxy network.

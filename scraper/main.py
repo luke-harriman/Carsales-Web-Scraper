@@ -13,6 +13,7 @@ import pprint as pp
 import regex as re 
 from datetime import datetime
 import zlib
+import clickhouse_connect
 
 user_agents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -117,11 +118,11 @@ def fetch_page_with_playwright(url):
         log_message("Navigating to URL")
         page.goto(url, wait_until="domcontentloaded", timeout=60000)
         time.sleep(random.uniform(1, 3))
-        page.mouse.move(random.randint(100, 500), random.randint(100, 500))
-
+        page.screenshot(path="screenshot.png")
 
         time.sleep(random.uniform(1, 3))
         page.reload(wait_until="domcontentloaded", timeout=60000)
+        page.screenshot(path="screenshot_v2.png")
 
         time.sleep(random.uniform(1, 3))
         print(page.content())
@@ -239,9 +240,14 @@ def transform_data_to_new_schema(original_data):
         transformed_data.append(new_item)
     return transformed_data
 
+def insert_data_to_db(data):
+    # Clickhouse 
+    client = clickhouse_connect.get_client(host='localhost', username='default', password='password')
+
+    client.insert('car_sales', data)
+
 # The URL you want to scrape
 url = 'https://www.carsales.com.au/cars/dealer/queensland-state/brisbane-region/electric-fueltype/'
 page_content = fetch_page_with_playwright(url)
-pp.pprint(page_content)
 transformed_data = transform_data_to_new_schema(page_content)
-pp.pprint(transformed_data)
+insert_data_to_db(transformed_data)
